@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOI GHOR — Read, Discover &amp; Imagine | Created by Kabya Saha</title>
+<meta name="description" content="BOI GHOR is a modern digital book reading platform where readers can discover books, explore categories and access their favorite stories.">
+
+<!-- Open Graph -->
+<meta property="og:title" content="BOI GHOR — Read, Discover & Imagine">
+<meta property="og:description" content="Humayun Ahmed Somogro — a modern digital reading platform. Discover stories that stay with you.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="BOI GHOR">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ LOADING SCREEN ============ -->
+<div id="loadingScreen" class="loading-screen" aria-hidden="true">
+  <div class="loading-inner">
+    <span class="loading-title">BOI GHOR</span>
+    <div class="loading-bar"><span></span></div>
+  </div>
+</div>
+
+<!-- ============ SCROLL PROGRESS BAR ============ -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a href="#home" class="brand" aria-label="BOI GHOR home">
+      <span class="brand-name">BOI GHOR</span>
+      <span class="brand-sub">CREATED BY KABYA SAHA</span>
+    </a>
+
+    <nav class="main-nav" id="mainNav" aria-label="Primary">
+      <a href="#home" class="nav-link active" data-nav="home">Home</a>
+      <a href="#reviews" class="nav-link" data-nav="reviews">Reviews</a>
+      <a href="#upcoming" class="nav-link" data-nav="upcoming">Upcoming</a>
+      <a href="#credits" class="nav-link" data-nav="credits">Credits</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle day and night mode" aria-pressed="false">
+        <span class="theme-icon" aria-hidden="true">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="5"></circle><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.2" y1="4.2" x2="5.6" y2="5.6"></line><line x1="18.4" y1="18.4" x2="19.8" y2="19.8"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.2" y1="19.8" x2="5.6" y2="18.4"></line><line x1="18.4" y1="5.6" x2="19.8" y2="4.2"></line></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"></path></svg>
+        </span>
+      </button>
+
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ MOBILE MENU ============ -->
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <nav aria-label="Mobile primary">
+    <a href="#home" data-nav="home">Home</a>
+    <a href="#reviews" data-nav="reviews">Reviews</a>
+    <a href="#upcoming" data-nav="upcoming">Upcoming</a>
+    <a href="#credits" data-nav="credits">Credits</a>
+  </nav>
+  <button class="mobile-theme-toggle" id="mobileThemeToggle">
+    <span id="mobileThemeLabel">Switch to Night Mode</span>
+  </button>
+</div>
+<div class="mobile-menu-backdrop" id="mobileMenuBackdrop"></div>
+
+<main id="home">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" aria-labelledby="heroHeading">
+    <div class="hero-particles" id="heroParticles" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">Humayun Ahmed Somogro</p>
+      <span class="hero-by">By Kabya Saha</span>
+
+      <h1 id="heroHeading" class="hero-title">
+        READ. ESCAPE. <span>IMAGINE.</span>
+      </h1>
+      <p class="hero-subtitle">Discover stories that stay with you.</p>
+
+      <div class="search-wrap">
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Search books, authors, categories..."
+            aria-label="Search books, authors, categories"
+            autocomplete="off"
+          >
+          <button class="search-clear" id="searchClear" aria-label="Clear search" hidden>&times;</button>
+          <kbd class="search-kbd">/</kbd>
+        </div>
+        <p class="search-meta" id="searchMeta" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CATEGORIES ============ -->
+  <section class="categories-section reveal" aria-labelledby="categoriesHeading">
+    <div class="section-inner">
+      <h2 id="categoriesHeading" class="visually-hidden">Filter by category</h2>
+      <div class="category-scroll" id="categoryList" role="tablist" aria-label="Book categories"></div>
+    </div>
+  </section>
+
+  <!-- ============ RECENTLY VIEWED ============ -->
+  <section class="recent-section reveal" id="recentSection" hidden aria-labelledby="recentHeading">
+    <div class="section-inner">
+      <h2 id="recentHeading" class="section-title">Recently Viewed</h2>
+      <div class="recent-row" id="recentRow"></div>
+    </div>
+  </section>
+
+  <!-- ============ EXPLORE BOOKS ============ -->
+  <section class="books-section" id="explore" aria-labelledby="exploreHeading">
+    <div class="section-inner">
+      <div class="books-heading-row reveal">
+        <div>
+          <h2 id="exploreHeading" class="section-title">Explore Books</h2>
+          <p class="section-count" id="bookCount"></p>
+        </div>
+        <button class="favorites-toggle" id="favoritesToggle" aria-pressed="false">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 21s-6.7-4.35-9.3-8.1C1 10.1 1.4 6.6 4.2 4.9c2.3-1.4 5-0.7 6.6 1.3.4.5.8 1 1.2 1.6.4-.6.8-1.1 1.2-1.6 1.6-2 4.3-2.7 6.6-1.3 2.8 1.7 3.2 5.2 1.5 8-2.6 3.75-9.3 8.1-9.3 8.1Z"></path></svg>
+          My Favorites
+        </button>
+      </div>
+
+      <div id="bookContainer" class="book-container" aria-live="polite"></div>
+
+      <div class="empty-state" id="emptyState" hidden>
+        <h3>No books found</h3>
+        <p>Try searching with another title, author, or category.</p>
+        <button class="btn btn-outline" id="clearSearchBtn">Clear Search</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REVIEWS ============ -->
+  <section class="reviews-section reveal" id="reviews" aria-labelledby="reviewsHeading">
+    <div class="section-inner">
+      <div class="books-heading-row">
+        <h2 id="reviewsHeading" class="section-title">Reviews</h2>
+        <button class="btn btn-primary" id="writeReviewBtn">Write a Review</button>
+      </div>
+      <div class="review-grid" id="reviewGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ UPCOMING BOOKS ============ -->
+  <section class="upcoming-section reveal" id="upcoming" aria-labelledby="upcomingHeading">
+    <div class="section-inner">
+      <h2 id="upcomingHeading" class="section-title">Upcoming Books</h2>
+      <p class="section-sub">New stories on their way — mark your calendar.</p>
+      <div class="upcoming-row" id="upcomingRow"></div>
+    </div>
+  </section>
+
+  <!-- ============ CREDITS ============ -->
+  <section class="credits-section reveal" id="credits" aria-labelledby="creditsHeading">
+    <div class="section-inner credits-inner">
+      <h2 id="creditsHeading" class="section-title">Credits</h2>
+      <p class="credits-author">Created by <strong>Kabya Saha</strong></p>
+      <p class="credits-text">"BOI GHOR is designed as a simple and elegant digital space for readers to discover and access stories they love."</p>
+
+      <div class="built-with">
+        <span class="built-label">Built with</span>
+        <div class="built-icons">
+          <span class="built-chip"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 2l1.6 18L12 22l6.4-2L20 2H4Z"></path></svg>HTML</span>
+          <span class="built-chip"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 2h16l-1.5 17L12 22l-6.5-3L4 2Z"></path></svg>CSS</span>
+          <span class="built-chip"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 2h16v20l-8-3-8 3V2Z"></path></svg>JavaScript</span>
+          <span class="built-chip"><svg viewBox="0 0 24 24" width="16" height="16"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>Responsive Design</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-col footer-brand">
+      <span class="brand-name">BOI GHOR</span>
+      <p>Created by Kabya Saha</p>
+      <p class="footer-desc">A modern digital reading platform bringing the world of Humayun Ahmed closer to every reader.</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>Quick Links</h3>
+      <a href="#home">Home</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#upcoming">Upcoming</a>
+      <a href="#credits">Credits</a>
+    </div>
+
+    <div class="footer-col">
+      <h3>Categories</h3>
+      <div id="footerCategories" class="footer-categories"></div>
+    </div>
+
+    <div class="footer-col footer-qr">
+      <h3>Scan &amp; Visit</h3>
+      <!-- ==== REPLACE QR CODE IMAGE URL IN script.js -> QR_CODE_URL ==== -->
+      <img id="qrCodeImg" src="" alt="BOI GHOR QR Code" width="120" height="120">
+      <p>Scan to visit BOI GHOR</p>
+    </div>
+  </div>
+
+  <div class="footer-divider"></div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2026 BOI GHOR. ALL RIGHTS RESERVED.</p>
+    <p>Created by Kabya Saha</p>
+  </div>
+</footer>
+
+<!-- ============ BACK TO TOP ============ -->
+<button class="back-to-top" id="backToTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+</button>
+
+<!-- ============ REVIEW MODAL ============ -->
+<div class="modal-backdrop" id="reviewModalBackdrop" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
+    <button class="modal-close" id="reviewModalClose" aria-label="Close">&times;</button>
+    <h3 id="reviewModalTitle">Write a Review</h3>
+    <form id="reviewForm">
+      <label for="reviewName">Your Name</label>
+      <input type="text" id="reviewName" name="reviewName" required placeholder="e.g. Ayesha Rahman">
+
+      <label for="reviewRating">Rating</label>
+      <div class="star-input" id="starInput" role="radiogroup" aria-label="Star rating">
+        <button type="button" class="star-btn" data-value="1" aria-label="1 star">★</button>
+        <button type="button" class="star-btn" data-value="2" aria-label="2 stars">★</button>
+        <button type="button" class="star-btn" data-value="3" aria-label="3 stars">★</button>
+        <button type="button" class="star-btn" data-value="4" aria-label="4 stars">★</button>
+        <button type="button" class="star-btn" data-value="5" aria-label="5 stars">★</button>
+      </div>
+      <input type="hidden" id="reviewRatingValue" value="5">
+
+      <label for="reviewText">Your Review</label>
+      <textarea id="reviewText" name="reviewText" rows="4" required placeholder="Share your thoughts..."></textarea>
+
+      <p class="form-note">Reviews are stored on this device only (frontend demo — no backend/server).</p>
+
+      <button type="submit" class="btn btn-primary btn-full">Submit Review</button>
+    </form>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
