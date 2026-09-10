@@ -16,7 +16,721 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="style.css">
+<style>
+/* =========================================================
+   Humayun Ahmed Somogro
+   Stylesheet
+   ========================================================= */
+
+/* ---------- Design tokens ---------- */
+:root{
+  --accent: #e50914;
+  --accent-dark: #b8060f;
+  --background: #f7f7f5;
+  --surface: #ffffff;
+  --surface-2: #f0efec;
+  --text: #111111;
+  --muted: #666666;
+  --border: rgba(17,17,17,0.08);
+  --shadow: 0 8px 22px rgba(17,17,17,0.06);
+  --shadow-lg: 0 16px 36px rgba(17,17,17,0.1);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+
+  /* Book content (Bangla) uses Baloo Da 2.
+     Everything else uses the secondary, general-purpose font. */
+  --font-bangla: 'Baloo Da 2', 'Hind Siliguri', 'Noto Sans Bengali', system-ui, sans-serif;
+  --font-secondary: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --header-h: 76px;
+  --ease: cubic-bezier(.4,0,.2,1);
+}
+
+[data-theme="dark"]{
+  --background: #000000;
+  --surface: #111111;
+  --surface-2: #1a1a1a;
+  --text: #ffffff;
+  --muted: #aaaaaa;
+  --border: rgba(255,255,255,0.08);
+  --shadow: 0 8px 22px rgba(0,0,0,0.4);
+  --shadow-lg: 0 18px 40px rgba(0,0,0,0.55);
+}
+
+*,*::before,*::after{ box-sizing: border-box; }
+
+html{ scroll-behavior: smooth; scroll-padding-top: var(--header-h); }
+
+body{
+  margin:0;
+  font-family: var(--font-secondary);
+  background: var(--background);
+  color: var(--text);
+  transition: background .35s var(--ease), color .35s var(--ease);
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+img{ max-width:100%; display:block; }
+a{ color: inherit; text-decoration:none; }
+button{ font-family: inherit; cursor:pointer; }
+ul{ margin:0; padding:0; }
+
+.visually-hidden{
+  position:absolute; width:1px;height:1px;overflow:hidden;
+  clip:rect(0,0,0,0); white-space:nowrap; border:0; padding:0; margin:-1px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.section-inner{
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section-title{
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+.section-count{ color: var(--muted); margin: 4px 0 28px; font-weight: 500; }
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding: 11px 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: .9rem;
+  border: 1.5px solid transparent;
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease), color .2s var(--ease);
+}
+.btn-primary{ background: var(--accent); color:#fff; box-shadow: 0 6px 16px rgba(229,9,20,.25); }
+.btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 8px 20px rgba(229,9,20,.32); background: var(--accent-dark); }
+.btn-outline{ background: transparent; border-color: var(--border); color: var(--text); }
+.btn-outline:hover{ border-color: var(--accent); color: var(--accent); }
+.btn-full{ width:100%; }
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================
+   SCROLL PROGRESS
+   ========================================================= */
+.scroll-progress{
+  position: fixed; top:0; left:0; height:3px; width:0%;
+  background: var(--accent); z-index: 1001;
+  transition: width .1s linear;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.site-header{
+  position: sticky; top:0; z-index: 900;
+  height: var(--header-h);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  background: rgba(247,247,245,0.75);
+  border-bottom: 1px solid var(--border);
+  transition: background .35s var(--ease), border-color .35s var(--ease), box-shadow .25s var(--ease);
+}
+[data-theme="dark"] .site-header{
+  background: rgba(0,0,0,0.65);
+}
+.header-inner{
+  max-width: 1180px; margin: 0 auto; padding: 0 24px;
+  height: 100%;
+  display:flex; align-items:center; justify-content:space-between;
+  gap: 20px;
+}
+.brand{ display:flex; flex-direction:column; line-height:1.15; min-width:0; }
+.brand-name{
+  font-weight: 700; font-size: clamp(1rem, 2vw, 1.25rem); letter-spacing:.2px;
+  color: var(--text);
+  white-space: nowrap;
+}
+.brand-sub{
+  font-size: .78rem; font-weight:600;
+  color: var(--accent); margin-top: 2px;
+}
+
+.main-nav{ display:flex; align-items:center; gap: 4px; }
+.nav-link{
+  position: relative;
+  padding: 10px 16px;
+  font-weight: 500;
+  font-size: .92rem;
+  color: var(--text);
+  border-radius: 999px;
+  transition: color .2s var(--ease);
+}
+.nav-link::after{
+  content:"";
+  position:absolute; left: 16px; right:16px; bottom: 4px;
+  height: 2px; background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .25s var(--ease);
+}
+.nav-link:hover{ color: var(--accent); }
+.nav-link:hover::after,
+.nav-link.active::after{ transform: scaleX(1); }
+.nav-link.active{ color: var(--accent); font-weight:600; }
+
+.header-actions{ display:flex; align-items:center; gap: 10px; }
+
+.theme-toggle{
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display:flex; align-items:center; justify-content:center;
+  color: var(--text);
+  transition: background .2s var(--ease), border-color .2s var(--ease);
+}
+.theme-toggle:hover{ border-color: var(--accent); }
+.theme-icon{ position:relative; width:20px; height:20px; display:block; }
+.icon-sun, .icon-moon{
+  position:absolute; top:0; left:0; fill:none; stroke: currentColor; stroke-width:1.6;
+  transition: opacity .3s var(--ease);
+}
+.icon-sun circle{ fill: currentColor; stroke:none; }
+.icon-moon{ fill: currentColor; opacity:0; }
+[data-theme="dark"] .icon-sun{ opacity:0; }
+[data-theme="dark"] .icon-moon{ opacity:1; }
+
+.hamburger{
+  display:none;
+  width: 40px; height:40px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--surface);
+  flex-direction:column; align-items:center; justify-content:center; gap:5px;
+}
+.hamburger span{
+  display:block; width: 18px; height: 2px; background: var(--text);
+  border-radius: 2px;
+  transition: transform .3s var(--ease), opacity .2s var(--ease);
+}
+.hamburger.open span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2){ opacity:0; }
+.hamburger.open span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+
+/* ---------- Mobile menu ---------- */
+.mobile-menu{
+  position: fixed; top: var(--header-h); right: 0;
+  width: min(320px, 82vw); height: calc(100vh - var(--header-h));
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  z-index: 950;
+  padding: 28px 24px;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform .3s var(--ease), opacity .3s var(--ease);
+  display:flex; flex-direction:column; gap: 24px;
+}
+.mobile-menu.open{ transform: translateX(0); opacity:1; }
+.mobile-menu nav{ display:flex; flex-direction:column; gap: 4px; }
+.mobile-menu nav a{
+  padding: 14px 12px; font-weight:500; font-size:1rem;
+  border-radius: 12px; color: var(--text);
+  transition: background .2s var(--ease), color .2s var(--ease);
+}
+.mobile-menu nav a:hover{ background: var(--surface-2); color: var(--accent); }
+.mobile-theme-toggle{
+  margin-top: auto;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  padding: 14px; border-radius: 12px; font-weight:500; color: var(--text);
+}
+.mobile-menu-backdrop{
+  position: fixed; inset: var(--header-h) 0 0 0;
+  background: rgba(0,0,0,.3);
+  z-index: 940;
+  opacity:0; visibility:hidden;
+  transition: opacity .3s var(--ease), visibility .3s var(--ease);
+}
+.mobile-menu-backdrop.open{ opacity:1; visibility:visible; }
+
+@media (max-width: 860px){
+  .main-nav{ display:none; }
+  .hamburger{ display:flex; }
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero{
+  position: relative;
+  padding: 90px 24px 80px;
+  text-align: center;
+  overflow: hidden;
+}
+.hero-particles{
+  position:absolute; inset:0; z-index:-1;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(229,9,20,.08), transparent 42%),
+    radial-gradient(circle at 82% 15%, rgba(229,9,20,.05), transparent 45%);
+}
+
+.hero-content{ max-width: 760px; margin: 0 auto; }
+.hero-title{
+  font-size: clamp(2.1rem, 5.4vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.12;
+  margin: 0 0 16px;
+  letter-spacing: .2px;
+}
+.hero-title span{ color: var(--accent); }
+.hero-subtitle{
+  color: var(--muted);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  margin: 0 0 40px;
+  font-weight: 400;
+}
+
+.search-wrap{ max-width: 600px; margin: 0 auto; }
+.search-box{
+  position: relative;
+  display:flex; align-items:center; gap: 12px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 10px 6px 22px;
+  box-shadow: var(--shadow);
+  transition: border-color .25s var(--ease), box-shadow .25s var(--ease);
+}
+.search-box:focus-within{
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(229,9,20,.12);
+}
+.search-icon{ color: var(--muted); flex-shrink:0; fill:none; stroke:currentColor; stroke-width:2; }
+.search-input{
+  flex:1; border:none; outline:none; background:transparent;
+  color: var(--text); font-family: inherit; font-size: 1rem;
+  padding: 12px 0; min-width:0;
+}
+.search-input::placeholder{ color: var(--muted); }
+.search-clear{
+  border:none; background: var(--surface-2); color: var(--muted);
+  width: 28px; height:28px; border-radius:50%; font-size: 1.1rem;
+  line-height:1; flex-shrink:0;
+  transition: background .2s var(--ease), color .2s var(--ease);
+}
+.search-clear:hover{ background: var(--accent); color:#fff; }
+.search-kbd{
+  flex-shrink:0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 9px;
+  font-size: .78rem;
+  color: var(--muted);
+  background: var(--surface-2);
+}
+@media (max-width: 560px){ .search-kbd{ display:none; } }
+.search-meta{
+  margin: 14px 0 0; color: var(--muted); font-size: .88rem; font-weight:500;
+}
+
+/* =========================================================
+   SCROLL REVEAL — subtle, single-pass
+   ========================================================= */
+.reveal{
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .5s var(--ease), transform .5s var(--ease);
+}
+.reveal.in-view{ opacity:1; transform: translateY(0); }
+
+/* =========================================================
+   CATEGORIES
+   ========================================================= */
+.categories-section{ padding: 8px 0 32px; }
+.category-scroll{
+  display:flex; gap: 10px; overflow-x:auto; padding: 4px 2px 10px;
+  scrollbar-width: thin;
+}
+.category-scroll::-webkit-scrollbar{ height:6px; }
+.category-scroll::-webkit-scrollbar-thumb{ background: var(--border); border-radius:99px; }
+
+.category-chip{
+  flex-shrink:0;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 500;
+  font-size: .88rem;
+  display:flex; align-items:center; gap:8px;
+  transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+}
+.category-chip .count{
+  font-size:.76rem; color: var(--muted); background: var(--surface-2);
+  padding: 1px 7px; border-radius: 999px;
+}
+.category-chip:hover{ border-color: var(--accent); color: var(--accent); }
+.category-chip.active{
+  background: var(--accent); border-color: var(--accent); color:#fff;
+}
+.category-chip.active .count{ background: rgba(255,255,255,.25); color:#fff; }
+
+/* =========================================================
+   RECENTLY VIEWED
+   ========================================================= */
+.recent-section{ padding: 8px 0; }
+.recent-row{
+  display:flex; gap:14px; overflow-x:auto; padding: 4px 2px 14px;
+}
+.recent-card{
+  flex-shrink:0; width: 128px;
+  cursor:pointer;
+}
+.recent-cover{
+  width:128px; height:176px; border-radius: 10px; overflow:hidden;
+  background: var(--surface-2); box-shadow: var(--shadow);
+  margin-bottom: 8px;
+}
+.recent-cover img{ width:100%; height:100%; object-fit:cover; }
+.recent-title{ font-family: var(--font-bangla); font-weight:600; font-size:.85rem; line-height:1.3; }
+
+/* =========================================================
+   BOOKS SECTION
+   ========================================================= */
+.books-section{ padding: 26px 0 64px; }
+.books-heading-row{
+  display:flex; align-items:flex-end; justify-content:space-between; gap: 16px;
+  flex-wrap: wrap;
+}
+.favorites-toggle{
+  display:flex; align-items:center; gap:8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-weight:500; font-size:.88rem;
+  transition: border-color .2s var(--ease), background .2s var(--ease), color .2s var(--ease);
+}
+.favorites-toggle svg{ fill:none; stroke:currentColor; stroke-width:1.8; }
+.favorites-toggle:hover{ border-color: var(--accent); color: var(--accent); }
+.favorites-toggle.active{ background: var(--accent); border-color:var(--accent); color:#fff; }
+.favorites-toggle.active svg{ fill:#fff; }
+
+.book-container{
+  display:flex; flex-direction:column; gap: 18px;
+  margin-top: 24px;
+}
+
+.book-card{
+  display:flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow:hidden;
+  box-shadow: var(--shadow);
+  position: relative;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .45s var(--ease), transform .45s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
+}
+.book-card.in-view{ opacity:1; transform: translateY(0); }
+.book-card:hover{
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(229,9,20,.3);
+}
+
+.book-cover{
+  flex-shrink:0;
+  width: 220px;
+  position: relative;
+  overflow:hidden;
+  background: var(--surface-2);
+}
+.book-cover img{
+  width:100%; height:100%; object-fit:cover;
+  transition: transform .4s var(--ease);
+}
+.book-card:hover .book-cover img{ transform: scale(1.03); }
+
+.cover-fallback{
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(155deg, var(--surface-2), var(--surface));
+  color: var(--muted); text-align:center; padding: 10px;
+}
+.cover-fallback .fallback-text{ font-weight:600; font-size:.8rem; line-height:1.4; letter-spacing:.3px; }
+
+.book-info{
+  flex:1;
+  padding: 22px 26px;
+  display:flex; flex-direction:column; gap: 6px;
+  min-width:0;
+}
+.book-title-row{
+  display:flex; align-items:flex-start; justify-content:space-between; gap: 10px;
+}
+.book-title{
+  font-family: var(--font-bangla);
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin:0;
+  line-height:1.3;
+}
+.fav-btn{
+  flex-shrink:0;
+  border:none; background:transparent; color: var(--muted);
+  width:34px; height:34px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  transition: background .2s var(--ease), color .2s var(--ease);
+}
+.fav-btn svg{ fill:none; stroke:currentColor; stroke-width:1.8; }
+.fav-btn:hover{ background: var(--surface-2); color: var(--accent); }
+.fav-btn.active{ color: var(--accent); }
+.fav-btn.active svg{ fill: var(--accent); }
+.fav-btn.pop{ animation: favPop .3s var(--ease); }
+@keyframes favPop{
+  0%{ transform: scale(1); }
+  50%{ transform: scale(1.15); }
+  100%{ transform: scale(1); }
+}
+
+.book-meta{
+  font-family: var(--font-bangla);
+  display:flex; flex-wrap:wrap; gap: 6px 16px;
+  color: var(--muted); font-size: .92rem; font-weight:500;
+  margin: 4px 0 10px;
+}
+.book-meta span strong{ color: var(--text); font-weight:600; }
+.book-category-badge{
+  font-family: var(--font-bangla);
+  display:inline-block; align-self:flex-start;
+  font-size:.74rem; font-weight:600; letter-spacing:.2px;
+  padding: 4px 12px; border-radius:999px;
+  background: rgba(229,9,20,.1); color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.read-now{
+  font-family: var(--font-bangla);
+  display:inline-flex; align-items:center; gap:6px;
+  align-self: flex-start;
+  margin-top:auto;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: var(--accent);
+  color:#fff; font-weight:600; font-size:.82rem;
+  transition: background .2s var(--ease), gap .2s var(--ease);
+}
+.read-now:hover{ gap: 9px; background: var(--accent-dark); }
+
+@media (max-width: 640px){
+  .book-card{ flex-direction: column; }
+  .book-cover{ width:100%; height: 240px; }
+  .book-info{ padding: 18px 18px 22px; }
+}
+
+/* Empty state */
+.empty-state{
+  text-align:center; padding: 60px 20px;
+}
+.empty-state h3{ font-size:1.3rem; margin-bottom:8px; }
+.empty-state p{ color: var(--muted); margin-bottom: 20px; }
+
+/* =========================================================
+   REVIEWS
+   ========================================================= */
+.reviews-section{ padding: 46px 0 64px; background: var(--surface-2); }
+
+.review-panel{
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height .35s var(--ease), opacity .3s var(--ease), margin .35s var(--ease);
+  margin-top: 0;
+}
+.review-panel.open{
+  max-height: 640px;
+  opacity: 1;
+  margin-top: 20px;
+}
+.review-panel form{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 22px 24px;
+  display:flex; flex-direction:column; gap: 6px;
+  max-width: 480px;
+}
+.review-panel label{ font-weight:600; font-size:.85rem; margin-top:10px; }
+.review-panel input[type="text"], .review-panel textarea{
+  padding: 11px 14px; border-radius:10px; border:1.5px solid var(--border);
+  background: var(--background); color: var(--text); font-family:inherit; font-size: .92rem;
+  resize: vertical;
+}
+.review-panel input:focus, .review-panel textarea:focus{ border-color: var(--accent); outline:none; }
+.star-input{ display:flex; gap:6px; }
+.star-btn{
+  border:none; background:transparent; font-size:1.5rem; color: var(--border);
+  transition: color .2s var(--ease);
+}
+.star-btn.filled{ color: var(--accent); }
+.review-panel .btn{ margin-top: 14px; }
+
+.review-grid{
+  margin-top: 26px;
+  display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+  gap: 18px;
+}
+.review-card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.review-top{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.review-avatar{
+  width:42px; height:42px; border-radius:50%;
+  background: var(--accent); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:600; flex-shrink:0;
+}
+.review-name{ font-weight:600; font-size:.95rem; margin:0; }
+.review-date{ color: var(--muted); font-size:.76rem; margin:0; }
+.review-stars{ color: var(--accent); letter-spacing:2px; margin: 6px 0 10px; }
+.review-text{ color: var(--text); font-size:.92rem; line-height:1.6; margin:0; }
+
+/* =========================================================
+   UPCOMING
+   ========================================================= */
+.upcoming-section{ padding: 56px 0 64px; }
+.upcoming-row{
+  display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+  gap: 20px; margin-top:24px;
+}
+.upcoming-card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow:hidden;
+  box-shadow: var(--shadow);
+  transition: box-shadow .25s var(--ease);
+  position:relative;
+}
+.upcoming-card:hover{ box-shadow: var(--shadow-lg); }
+.upcoming-cover{ position:relative; height: 210px; background: var(--surface-2); overflow:hidden;}
+.upcoming-cover img{ width:100%; height:100%; object-fit:cover; }
+.coming-soon-badge{
+  position:absolute; top:12px; left:12px;
+  background: var(--accent); color:#fff;
+  font-size:.68rem; font-weight:600; letter-spacing:.3px;
+  padding: 5px 11px; border-radius:999px;
+}
+.upcoming-body{ padding: 16px 18px 20px; }
+.upcoming-title{ font-family: var(--font-bangla); font-weight:700; font-size:1.02rem; margin:0 0 4px; }
+.upcoming-author{ font-family: var(--font-bangla); color: var(--muted); font-size:.85rem; margin:0 0 4px; }
+.upcoming-date{ font-family: var(--font-bangla); color: var(--accent); font-weight:600; font-size:.8rem; margin:0 0 14px; }
+.btn-disabled{
+  width:100%; padding: 9px; border-radius: 999px;
+  background: var(--surface-2); color: var(--muted);
+  font-weight:600; font-size:.82rem; border:1px solid var(--border);
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   CREDITS
+   ========================================================= */
+.credits-section{ padding: 64px 0; background: var(--surface-2); }
+.credits-inner{ text-align:center; max-width: 620px; }
+.credits-author{ font-size:1.05rem; margin: 0 0 16px; }
+.credits-text{ color: var(--muted); font-style: italic; line-height:1.7; margin-bottom: 28px; }
+.built-with{ display:flex; flex-direction:column; align-items:center; gap:14px; }
+.built-icons{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
+.built-chip{
+  display:flex; align-items:center; gap:7px;
+  background: var(--surface); border:1px solid var(--border);
+  padding: 8px 16px; border-radius: 999px; font-weight:500; font-size:.82rem;
+  color: var(--text);
+}
+.built-chip svg{ fill: var(--accent); }
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.site-footer{ background: var(--surface); border-top:1px solid var(--border); padding-top: 54px; }
+.footer-inner{
+  max-width:1180px; margin:0 auto; padding: 0 24px;
+  display:grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px;
+}
+.footer-col h3{ font-size:.92rem; margin: 0 0 16px; font-weight:600; }
+.footer-col a{
+  display:block; color: var(--muted); margin-bottom:10px; font-weight:500;
+  transition: color .2s var(--ease);
+  width:fit-content;
+}
+.footer-col a:hover{ color: var(--accent); }
+.footer-brand{ display:flex; flex-direction:column; }
+.footer-brand .brand-name{ font-size:1.15rem; }
+.footer-brand .brand-sub{ margin-top:4px; }
+.footer-categories{ display:flex; flex-wrap:wrap; gap:8px; }
+.footer-categories span{
+  font-size:.76rem; padding: 5px 11px; border-radius:999px;
+  background: var(--surface-2); color: var(--muted); font-weight:500;
+}
+.footer-qr img{
+  width:110px; height:110px; border-radius:12px; background: var(--surface-2);
+  border: 1px solid var(--border); object-fit:cover; margin-bottom:10px;
+}
+.footer-qr p{ color: var(--muted); font-size:.85rem; }
+
+.footer-divider{ height:1px; background: var(--border); max-width:1180px; margin: 36px auto 0; }
+.footer-bottom{
+  max-width:1180px; margin:0 auto; padding: 20px 24px 28px;
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  color: var(--muted); font-size:.8rem; font-weight:500;
+}
+
+@media (max-width: 860px){
+  .footer-inner{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px){
+  .footer-inner{ grid-template-columns: 1fr; }
+}
+
+/* =========================================================
+   BACK TO TOP
+   ========================================================= */
+.back-to-top{
+  position: fixed; right: 22px; bottom: 22px; z-index: 500;
+  width: 46px; height:46px; border-radius:50%;
+  background: var(--accent); color:#fff; border:none;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow: 0 8px 18px rgba(229,9,20,.35);
+  opacity:0; visibility:hidden; transform: translateY(10px);
+  transition: opacity .25s var(--ease), transform .25s var(--ease), visibility .25s var(--ease), background .2s var(--ease);
+}
+.back-to-top.show{ opacity:1; visibility:visible; transform: translateY(0); }
+.back-to-top:hover{ background: var(--accent-dark); }
+.back-to-top svg{ fill:none; stroke:currentColor; stroke-width:2.2; }
+
+/* =========================================================
+   UTILITY
+   ========================================================= */
+body.no-scroll{ overflow: hidden; }
+
+</style>
 </head>
 <body>
 
@@ -35,6 +749,1096 @@
       <a href="#home" class="nav-link active" data-nav="home">Home</a>
       <a href="#reviews" class="nav-link" data-nav="reviews">Reviews</a>
       <a href="#upcoming" class="nav-link" data-nav="upcoming">Upcoming</a>
+      <a href="#credits" class="nav-link" data-nav="credits">Credits</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle day and night mode" aria-pressed="false">
+        <span class="theme-icon" aria-hidden="true">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="5"></circle><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.2" y1="4.2" x2="5.6" y2="5.6"></line><line x1="18.4" y1="18.4" x2="19.8" y2="19.8"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.2" y1="19.8" x2="5.6" y2="18.4"></line><line x1="18.4" y1="5.6" x2="19.8" y2="4.2"></line></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"></path></svg>
+        </span>
+      </button>
+
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ MOBILE MENU ============ -->
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <nav aria-label="Mobile primary">
+    <a href="#home" data-nav="home">Home</a>
+    <a href="#reviews" data-nav="reviews">Reviews</a>
+    <a href="#upcoming" data-nav="upcoming">Upcoming</a>
+    <a href="#credits" data-nav="credits">Credits</a>
+  </nav>
+  <button class="mobile-theme-toggle" id="mobileThemeToggle">
+    <span id="mobileThemeLabel">Switch to Night Mode</span>
+  </button>
+</div>
+<div class="mobile-menu-backdrop" id="mobileMenuBackdrop"></div>
+
+<main id="home">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" aria-labelledby="heroHeading">
+    <div class="hero-particles" id="heroParticles" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <h1 id="heroHeading" class="hero-title">
+        READ. ESCAPE. <span>IMAGINE.</span>
+      </h1>
+      <p class="hero-subtitle">Discover stories that stay with you.</p>
+
+      <div class="search-wrap">
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Search books, authors, categories..."
+            aria-label="Search books, authors, categories"
+            autocomplete="off"
+          >
+          <button class="search-clear" id="searchClear" aria-label="Clear search" hidden>&times;</button>
+          <kbd class="search-kbd">/</kbd>
+        </div>
+        <p class="search-meta" id="searchMeta" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CATEGORIES ============ -->
+  <section class="categories-section reveal" aria-labelledby="categoriesHeading">
+    <div class="section-inner">
+      <h2 id="categoriesHeading" class="visually-hidden">Filter by category</h2>
+      <div class="category-scroll" id="categoryList" role="tablist" aria-label="Book categories"></div>
+    </div>
+  </section>
+
+  <!-- ============ RECENTLY VIEWED ============ -->
+  <section class="recent-section reveal" id="recentSection" hidden aria-labelledby="recentHeading">
+    <div class="section-inner">
+      <h2 id="recentHeading" class="section-title">Recently Viewed</h2>
+      <div class="recent-row" id="recentRow"></div>
+    </div>
+  </section>
+
+  <!-- ============ EXPLORE BOOKS ============ -->
+  <section class="books-section" id="explore" aria-labelledby="exploreHeading">
+    <div class="section-inner">
+      <div class="books-heading-row reveal">
+        <div>
+          <h2 id="exploreHeading" class="section-title">Explore Books</h2>
+          <p class="section-count" id="bookCount"></p>
+        </div>
+        <button class="favorites-toggle" id="favoritesToggle" aria-pressed="false">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 21s-6.7-4.35-9.3-8.1C1 10.1 1.4 6.6 4.2 4.9c2.3-1.4 5-0.7 6.6 1.3.4.5.8 1 1.2 1.6.4-.6.8-1.1 1.2-1.6 1.6-2 4.3-2.7 6.6-1.3 2.8 1.7 3.2 5.2 1.5 8-2.6 3.75-9.3 8.1-9.3 8.1Z"></path></svg>
+          My Favorites
+        </button>
+      </div>
+
+      <div id="bookContainer" class="book-container" aria-live="polite"></div>
+
+      <div class="empty-state" id="emptyState" hidden>
+        <h3>No books found</h3>
+        <p>Try searching with another title, author, or category.</p>
+        <button class="btn btn-outline" id="clearSearchBtn">Clear Search</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REVIEWS ============ -->
+  <section class="reviews-section reveal" id="reviews" aria-labelledby="reviewsHeading">
+    <div class="section-inner">
+      <div class="books-heading-row">
+        <h2 id="reviewsHeading" class="section-title">Reviews</h2>
+        <button class="btn btn-primary" id="writeReviewBtn" aria-expanded="false" aria-controls="reviewPanel">Write a Review</button>
+      </div>
+
+      <!-- Inline panel (no popup) — toggles open/closed under the button -->
+      <div class="review-panel" id="reviewPanel" hidden>
+        <form id="reviewForm">
+          <label for="reviewName">Your Name</label>
+          <input type="text" id="reviewName" name="reviewName" required placeholder="e.g. Ayesha Rahman">
+
+          <label for="reviewRating">Rating</label>
+          <div class="star-input" id="starInput" role="radiogroup" aria-label="Star rating">
+            <button type="button" class="star-btn" data-value="1" aria-label="1 star">★</button>
+            <button type="button" class="star-btn" data-value="2" aria-label="2 stars">★</button>
+            <button type="button" class="star-btn" data-value="3" aria-label="3 stars">★</button>
+            <button type="button" class="star-btn" data-value="4" aria-label="4 stars">★</button>
+            <button type="button" class="star-btn" data-value="5" aria-label="5 stars">★</button>
+          </div>
+          <input type="hidden" id="reviewRatingValue" value="5">
+
+          <label for="reviewText">Your Review</label>
+          <textarea id="reviewText" name="reviewText" rows="3" required placeholder="Share your thoughts..."></textarea>
+
+          <button type="submit" class="btn btn-primary btn-full">Submit Review</button>
+        </form>
+      </div>
+
+      <div class="review-grid" id="reviewGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ UPCOMING BOOKS ============ -->
+  <section class="upcoming-section reveal" id="upcoming" aria-labelledby="upcomingHeading">
+    <div class="section-inner">
+      <h2 id="upcomingHeading" class="section-title">Upcoming Books</h2>
+      <div class="upcoming-row" id="upcomingRow"></div>
+    </div>
+  </section>
+
+  <!-- ============ CREDITS ============ -->
+  <section class="credits-section reveal" id="credits" aria-labelledby="creditsHeading">
+    <div class="section-inner credits-inner">
+      <h2 id="creditsHeading" class="section-title">Credits</h2>
+      <p class="credits-author">Created by <strong>Kabya Saha</strong></p>
+      <p class="credits-text">"Humayun Ahmed Somogro is designed as a simple and elegant digital space for readers to discover and access stories they love."</p>
+
+      <div class="built-with">
+        <div class="built-icons">
+          <span class="built-chip"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 2l1.6 18L12 22l6.4-2L20 2H4Z"></path></svg>HTML</span>
+          <span class="built-chip"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 2h16l-1.5 17L12 22l-6.5-3L4 2Z"></path></svg>CSS</span>
+          <span class="built-chip"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 2h16v20l-8-3-8 3V2Z"></path></svg>JavaScript</span>
+          <span class="built-chip"><svg viewBox="0 0 24 24" width="16" height="16"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>Responsive Design</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-col footer-brand">
+      <span class="brand-name">Humayun Ahmed Somogro</span>
+      <span class="brand-sub">By Kabya Saha</span>
+    </div>
+
+    <div class="footer-col">
+      <h3>Quick Links</h3>
+      <a href="#home">Home</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#upcoming">Upcoming</a>
+      <a href="#credits">Credits</a>
+    </div>
+
+    <div class="footer-col">
+      <h3>Categories</h3>
+      <div id="footerCategories" class="footer-categories"></div>
+    </div>
+
+    <div class="footer-col footer-qr">
+      <h3>Scan &amp; Visit</h3>
+      <!-- ==== REPLACE QR CODE IMAGE URL IN script.js -> QR_CODE_URL ==== -->
+      <img id="qrCodeImg" src="" alt="Humayun Ahmed Somogro QR Code" width="120" height="120">
+      <p>Scan to visit</p>
+    </div>
+  </div>
+
+  <div class="footer-divider"></div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2026 Humayun Ahmed Somogro. ALL RIGHTS RESERVED.</p>
+    <p>Created by Kabya Saha</p>
+  </div>
+</footer>
+
+<!-- ============ BACK TO TOP ============ -->
+<button class="back-to-top" id="backToTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+</button>
+
+<script>
+/* =========================================================
+   Humayun Ahmed Somogro — EASY CUSTOMIZATION AREA
+   Edit the values below to rebrand or reconfigure the site.
+   ========================================================= */
+
+const SITE_NAME = "Humayun Ahmed Somogro";
+const CREATOR_NAME = "Kabya Saha";
+
+// ==== REPLACE THIS with your own QR code image URL ====
+const QR_CODE_URL = "PASTE_QR_CODE_IMAGE_URL_HERE";
+
+/* =========================================================
+   BOOK DATABASE — SINGLE SOURCE OF TRUTH
+   ---------------------------------------------------------
+   EDIT BOOK INFORMATION HERE.
+   Everything on the website (cards, search, categories,
+   counts, favorites, recently viewed) is generated
+   automatically from this array. You never need to touch
+   the HTML, search code, or category code.
+
+   Field guide:
+     id        -> unique number, never repeat
+     title     -> BOOK NAME (shown bold on the card)
+     author    -> AUTHOR NAME (defaults to "Humayun Ahmed")
+     pages     -> PAGE COUNT (number, no quotes)
+     category  -> CATEGORY (drives category filters + counts)
+     image     -> COVER IMAGE URL — replace PASTE_..._HERE
+     readLink  -> "READ NOW" DESTINATION — replace PASTE_..._HERE
+   ========================================================= */
+const books = [
+  { id: 1,  title: "Himu",                          author: "Humayun Ahmed", pages: 176, category: "Fiction",   image: "PASTE_BOOK_COVER_IMAGE_URL_01_HERE", readLink: "PASTE_READ_NOW_LINK_01_HERE" },
+  { id: 2,  title: "Moyurakkhi",                     author: "Humayun Ahmed", pages: 160, category: "Fiction",   image: "PASTE_BOOK_COVER_IMAGE_URL_02_HERE", readLink: "PASTE_READ_NOW_LINK_02_HERE" },
+  { id: 3,  title: "Nondito Noroke",                 author: "Humayun Ahmed", pages: 132, category: "Fiction",   image: "PASTE_BOOK_COVER_IMAGE_URL_03_HERE", readLink: "PASTE_READ_NOW_LINK_03_HERE" },
+  { id: 4,  title: "Elebele",                        author: "Humayun Ahmed", pages: 144, category: "Fiction",   image: "PASTE_BOOK_COVER_IMAGE_URL_04_HERE", readLink: "PASTE_READ_NOW_LINK_04_HERE" },
+  { id: 5,  title: "Debi",                           author: "Humayun Ahmed", pages: 208, category: "Horror",    image: "PASTE_BOOK_COVER_IMAGE_URL_05_HERE", readLink: "PASTE_READ_NOW_LINK_05_HERE" },
+  { id: 6,  title: "Nishithini",                     author: "Humayun Ahmed", pages: 192, category: "Horror",    image: "PASTE_BOOK_COVER_IMAGE_URL_06_HERE", readLink: "PASTE_READ_NOW_LINK_06_HERE" },
+  { id: 7,  title: "Misir Ali Omnibus",               author: "Humayun Ahmed", pages: 384, category: "Mystery",   image: "PASTE_BOOK_COVER_IMAGE_URL_07_HERE", readLink: "PASTE_READ_NOW_LINK_07_HERE" },
+  { id: 8,  title: "Nishad",                         author: "Humayun Ahmed", pages: 168, category: "Thriller",  image: "PASTE_BOOK_COVER_IMAGE_URL_08_HERE", readLink: "PASTE_READ_NOW_LINK_08_HERE" },
+  { id: 9,  title: "Bhoy",                           author: "Humayun Ahmed", pages: 152, category: "Thriller",  image: "PASTE_BOOK_COVER_IMAGE_URL_09_HERE", readLink: "PASTE_READ_NOW_LINK_09_HERE" },
+  { id: 10, title: "Shuvro",                         author: "Humayun Ahmed", pages: 176, category: "Romance",   image: "PASTE_BOOK_COVER_IMAGE_URL_10_HERE", readLink: "PASTE_READ_NOW_LINK_10_HERE" },
+  { id: 11, title: "Tomake",                         author: "Humayun Ahmed", pages: 148, category: "Romance",   image: "PASTE_BOOK_COVER_IMAGE_URL_11_HERE", readLink: "PASTE_READ_NOW_LINK_11_HERE" },
+  { id: 12, title: "Ei Shubhoshondhay",                author: "Humayun Ahmed", pages: 156, category: "Romance",   image: "PASTE_BOOK_COVER_IMAGE_URL_12_HERE", readLink: "PASTE_READ_NOW_LINK_12_HERE" },
+  { id: 13, title: "Kobi",                           author: "Humayun Ahmed", pages: 224, category: "Drama",     image: "PASTE_BOOK_COVER_IMAGE_URL_13_HERE", readLink: "PASTE_READ_NOW_LINK_13_HERE" },
+  { id: 14, title: "Shonkhonil Karagar",               author: "Humayun Ahmed", pages: 136, category: "Drama",     image: "PASTE_BOOK_COVER_IMAGE_URL_14_HERE", readLink: "PASTE_READ_NOW_LINK_14_HERE" },
+  { id: 15, title: "Aguner Poroshmoni",                author: "Humayun Ahmed", pages: 168, category: "Drama",     image: "PASTE_BOOK_COVER_IMAGE_URL_15_HERE", readLink: "PASTE_READ_NOW_LINK_15_HERE" },
+  { id: 16, title: "Bohubrihi",                       author: "Humayun Ahmed", pages: 144, category: "Adventure", image: "PASTE_BOOK_COVER_IMAGE_URL_16_HERE", readLink: "PASTE_READ_NOW_LINK_16_HERE" },
+  { id: 17, title: "Rupa",                           author: "Humayun Ahmed", pages: 200, category: "Adventure", image: "PASTE_BOOK_COVER_IMAGE_URL_17_HERE", readLink: "PASTE_READ_NOW_LINK_17_HERE" },
+  { id: 18, title: "Anil Bagchir Ekdin",               author: "Humayun Ahmed", pages: 112, category: "Sci-Fi",    image: "PASTE_BOOK_COVER_IMAGE_URL_18_HERE", readLink: "PASTE_READ_NOW_LINK_18_HERE" },
+  { id: 19, title: "Tandra Bilash",                   author: "Humayun Ahmed", pages: 184, category: "Fantasy",   image: "PASTE_BOOK_COVER_IMAGE_URL_19_HERE", readLink: "PASTE_READ_NOW_LINK_19_HERE" },
+  { id: 20, title: "Chander Alo Rate Ekhane Eso",       author: "Humayun Ahmed", pages: 196, category: "Fantasy",   image: "PASTE_BOOK_COVER_IMAGE_URL_20_HERE", readLink: "PASTE_READ_NOW_LINK_20_HERE" },
+];
+
+/* =========================================================
+   UPCOMING BOOKS — edit / add as needed
+   ========================================================= */
+const upcomingBooks = [
+  { id: 101, title: "Megher Opare Megh", author: "Humayun Ahmed", releaseDate: "Dec 2026", image: "PASTE_UPCOMING_COVER_URL_01_HERE" },
+  { id: 102, title: "Shesh Bikeler Alo",  author: "Humayun Ahmed", releaseDate: "Jan 2027", image: "PASTE_UPCOMING_COVER_URL_02_HERE" },
+  { id: 103, title: "Nirjon Prohor",      author: "Humayun Ahmed", releaseDate: "Mar 2027", image: "PASTE_UPCOMING_COVER_URL_03_HERE" },
+  { id: 104, title: "Brishtir Nupur",     author: "Humayun Ahmed", releaseDate: "May 2027", image: "PASTE_UPCOMING_COVER_URL_04_HERE" },
+];
+
+/* =========================================================
+   SAMPLE REVIEWS (seed data — shown alongside user reviews)
+   ========================================================= */
+const seedReviews = [
+  { name: "Ayesha Rahman", rating: 5, text: "Himu made me fall in love with reading all over again. A timeless character.", date: "2026-06-12" },
+  { name: "Tanvir Hasan",  rating: 5, text: "The Misir Ali stories are brilliantly logical yet deeply human. Highly recommend.", date: "2026-07-03" },
+  { name: "Nusrat Jahan",  rating: 4, text: "Debi kept me up at night — genuinely unsettling in the best way.", date: "2026-07-20" },
+];
+
+/* =========================================================================
+   END OF CUSTOMIZATION AREA — core application logic below
+   ========================================================================= */
+
+(function () {
+  "use strict";
+
+  /* ---------------- State ---------------- */
+  const state = {
+    searchTerm: "",
+    activeCategory: "All",
+    showFavoritesOnly: false,
+    favorites: loadFromStorage("boighor_favorites", []),
+    recentlyViewed: loadFromStorage("boighor_recent", []),
+    reviews: loadFromStorage("boighor_reviews", []),
+    theme: (function () {
+      try {
+        return localStorage.getItem("boighor_theme") || "light";
+      } catch (e) {
+        return "light";
+      }
+    })(),
+    selectedStar: 5,
+  };
+
+  /* ---------------- Storage helpers ---------------- */
+  function loadFromStorage(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+  function saveToStorage(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {
+      /* storage unavailable — fail silently */
+    }
+  }
+
+  /* ---------------- DOM refs ---------------- */
+  const bookContainer = document.getElementById("bookContainer");
+  const emptyState = document.getElementById("emptyState");
+  const bookCountEl = document.getElementById("bookCount");
+  const searchMetaEl = document.getElementById("searchMeta");
+  const searchInput = document.getElementById("searchInput");
+  const searchClear = document.getElementById("searchClear");
+  const categoryList = document.getElementById("categoryList");
+  const favoritesToggle = document.getElementById("favoritesToggle");
+  const clearSearchBtn = document.getElementById("clearSearchBtn");
+  const footerCategories = document.getElementById("footerCategories");
+  const recentSection = document.getElementById("recentSection");
+  const recentRow = document.getElementById("recentRow");
+
+  /* =========================================================
+     SEARCH — automatically derived from book fields.
+     No manual keyword lists required.
+     ========================================================= */
+  function normalize(str) {
+    return String(str)
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, " ");
+  }
+
+  function matchesSearch(book, query) {
+    const q = normalize(query);
+    if (!q) return true;
+    const searchableText = normalize(
+      [book.title, book.author, book.category, book.pages].join(" ")
+    );
+    return searchableText.includes(q);
+  }
+
+  function matchesCategory(book, category) {
+    return category === "All" || book.category === category;
+  }
+
+  /* =========================================================
+     DYNAMIC FILTER PIPELINE
+     ALL BOOKS -> SEARCH FILTER -> CATEGORY FILTER -> FAVORITES FILTER
+     ========================================================= */
+  function getFilteredBooks() {
+    return books.filter((book) => {
+      if (!matchesSearch(book, state.searchTerm)) return false;
+      if (!matchesCategory(book, state.activeCategory)) return false;
+      if (state.showFavoritesOnly && !state.favorites.includes(book.id)) return false;
+      return true;
+    });
+  }
+
+  /* =========================================================
+     CATEGORY LIST — derived automatically from books array
+     ========================================================= */
+  function getCategoryCounts() {
+    const counts = {};
+    books.forEach((book) => {
+      counts[book.category] = (counts[book.category] || 0) + 1;
+    });
+    return counts;
+  }
+
+  function renderCategories() {
+    const counts = getCategoryCounts();
+    const categories = ["All", ...Object.keys(counts).sort()];
+
+    categoryList.innerHTML = "";
+    categories.forEach((cat) => {
+      const btn = document.createElement("button");
+      btn.className = "category-chip" + (state.activeCategory === cat ? " active" : "");
+      btn.setAttribute("role", "tab");
+      btn.setAttribute("aria-selected", state.activeCategory === cat ? "true" : "false");
+      btn.dataset.category = cat;
+
+      const label = document.createElement("span");
+      label.textContent = cat;
+      btn.appendChild(label);
+
+      const countBadge = document.createElement("span");
+      countBadge.className = "count";
+      countBadge.textContent = cat === "All" ? books.length : counts[cat];
+      btn.appendChild(countBadge);
+
+      btn.addEventListener("click", () => {
+        state.activeCategory = cat;
+        renderCategories();
+        renderBooks();
+      });
+
+      categoryList.appendChild(btn);
+    });
+
+    // Footer categories (read-only chips)
+    if (footerCategories) {
+      footerCategories.innerHTML = "";
+      Object.keys(counts)
+        .sort()
+        .forEach((cat) => {
+          const span = document.createElement("span");
+          span.textContent = `${cat} (${counts[cat]})`;
+          footerCategories.appendChild(span);
+        });
+    }
+  }
+
+  /* =========================================================
+     BOOK CARD RENDERING (safe DOM APIs, no innerHTML injection
+     of untrusted data)
+     ========================================================= */
+  function createBookCard(book) {
+    const card = document.createElement("article");
+    card.className = "book-card";
+    card.dataset.id = book.id;
+
+    // ---- Cover ----
+    const cover = document.createElement("div");
+    cover.className = "book-cover";
+
+    const img = document.createElement("img");
+    img.loading = "lazy";
+    img.alt = `${book.title} book cover`;
+    img.src = book.image;
+
+    const fallback = document.createElement("div");
+    fallback.className = "cover-fallback";
+    fallback.hidden = true;
+    fallback.innerHTML = `<span class="fallback-text">NO COVER<br>AVAILABLE</span>`;
+
+    img.addEventListener("error", () => {
+      img.hidden = true;
+      fallback.hidden = false;
+    });
+    if (!book.image || book.image.startsWith("PASTE_")) {
+      img.hidden = true;
+      fallback.hidden = false;
+    }
+
+    cover.appendChild(img);
+    cover.appendChild(fallback);
+
+    // ---- Info ----
+    const info = document.createElement("div");
+    info.className = "book-info";
+
+    const titleRow = document.createElement("div");
+    titleRow.className = "book-title-row";
+
+    const title = document.createElement("h3");
+    title.className = "book-title";
+    title.textContent = book.title;
+
+    const favBtn = document.createElement("button");
+    favBtn.className = "fav-btn" + (state.favorites.includes(book.id) ? " active" : "");
+    favBtn.setAttribute("aria-label", "Toggle favorite for " + book.title);
+    favBtn.setAttribute("aria-pressed", state.favorites.includes(book.id) ? "true" : "false");
+    favBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 21s-6.7-4.35-9.3-8.1C1 10.1 1.4 6.6 4.2 4.9c2.3-1.4 5-0.7 6.6 1.3.4.5.8 1 1.2 1.6.4-.6.8-1.1 1.2-1.6 1.6-2 4.3-2.7 6.6-1.3 2.8 1.7 3.2 5.2 1.5 8-2.6 3.75-9.3 8.1-9.3 8.1Z"></path></svg>`;
+    favBtn.addEventListener("click", () => toggleFavorite(book.id, favBtn));
+
+    titleRow.appendChild(title);
+    titleRow.appendChild(favBtn);
+
+    const categoryBadge = document.createElement("span");
+    categoryBadge.className = "book-category-badge";
+    categoryBadge.textContent = book.category;
+
+    const meta = document.createElement("div");
+    meta.className = "book-meta";
+    meta.innerHTML = `
+      <span>Pages: <strong>${book.pages}</strong></span>
+      <span>Author: <strong>${escapeHtml(book.author)}</strong></span>
+    `;
+
+    const readNow = document.createElement("a");
+    readNow.className = "read-now";
+    readNow.href = book.readLink && !book.readLink.startsWith("PASTE_") ? book.readLink : "#";
+    readNow.target = "_blank";
+    readNow.rel = "noopener noreferrer";
+    readNow.innerHTML = `READ NOW <span aria-hidden="true">&rarr;</span>`;
+    readNow.addEventListener("click", (e) => {
+      if (!book.readLink || book.readLink.startsWith("PASTE_")) {
+        e.preventDefault();
+      }
+      addToRecentlyViewed(book.id);
+    });
+
+    info.appendChild(titleRow);
+    info.appendChild(categoryBadge);
+    info.appendChild(meta);
+    info.appendChild(readNow);
+
+    card.appendChild(cover);
+    card.appendChild(info);
+
+    return card;
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  /* =========================================================
+     RENDER BOOKS (main list)
+     ========================================================= */
+  let revealObserver;
+
+  function renderBooks() {
+    const filtered = getFilteredBooks();
+
+    bookContainer.innerHTML = "";
+
+    if (filtered.length === 0) {
+      emptyState.hidden = false;
+    } else {
+      emptyState.hidden = true;
+      const fragment = document.createDocumentFragment();
+      filtered.forEach((book) => fragment.appendChild(createBookCard(book)));
+      bookContainer.appendChild(fragment);
+    }
+
+    updateBookCount(filtered.length);
+    observeRevealCards();
+  }
+
+  function updateBookCount(filteredCount) {
+    // Total count derived automatically from books.length
+    bookCountEl.textContent = `${books.length} STORIES TO DISCOVER`;
+
+    if (state.searchTerm || state.activeCategory !== "All" || state.showFavoritesOnly) {
+      searchMetaEl.textContent = `${filteredCount} book${filteredCount === 1 ? "" : "s"} found`;
+    } else {
+      searchMetaEl.textContent = "";
+    }
+  }
+
+  function observeRevealCards() {
+    if (!("IntersectionObserver" in window)) {
+      document.querySelectorAll(".book-card").forEach((c) => c.classList.add("in-view"));
+      return;
+    }
+    if (!revealObserver) {
+      revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              // staggered entrance
+              const delay = Array.from(bookContainer.children).indexOf(entry.target) * 60;
+              setTimeout(() => entry.target.classList.add("in-view"), delay);
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+    }
+    document.querySelectorAll(".book-card:not(.in-view)").forEach((card) => revealObserver.observe(card));
+  }
+
+  /* =========================================================
+     SEARCH HANDLING
+     ========================================================= */
+  function handleSearch() {
+    state.searchTerm = searchInput.value;
+    searchClear.hidden = state.searchTerm.length === 0;
+    renderBooks();
+  }
+
+  function clearSearch() {
+    state.searchTerm = "";
+    searchInput.value = "";
+    searchClear.hidden = true;
+    renderBooks();
+    searchInput.focus();
+  }
+
+  /* =========================================================
+     FAVORITES
+     ========================================================= */
+  function loadFavorites() {
+    state.favorites = loadFromStorage("boighor_favorites", []);
+  }
+  function saveFavorites() {
+    saveToStorage("boighor_favorites", state.favorites);
+  }
+
+  function toggleFavorite(id, btnEl) {
+    const idx = state.favorites.indexOf(id);
+    if (idx === -1) {
+      state.favorites.push(id);
+    } else {
+      state.favorites.splice(idx, 1);
+    }
+    saveFavorites();
+
+    if (btnEl) {
+      btnEl.classList.toggle("active", state.favorites.includes(id));
+      btnEl.setAttribute("aria-pressed", state.favorites.includes(id) ? "true" : "false");
+      btnEl.classList.remove("pop");
+      // force reflow to restart animation
+      void btnEl.offsetWidth;
+      btnEl.classList.add("pop");
+    }
+
+    if (state.showFavoritesOnly) renderBooks();
+  }
+
+  function toggleFavoritesFilter() {
+    state.showFavoritesOnly = !state.showFavoritesOnly;
+    favoritesToggle.classList.toggle("active", state.showFavoritesOnly);
+    favoritesToggle.setAttribute("aria-pressed", state.showFavoritesOnly ? "true" : "false");
+    renderBooks();
+  }
+
+  /* =========================================================
+     RECENTLY VIEWED
+     ========================================================= */
+  function addToRecentlyViewed(id) {
+    state.recentlyViewed = state.recentlyViewed.filter((existingId) => existingId !== id);
+    state.recentlyViewed.unshift(id);
+    state.recentlyViewed = state.recentlyViewed.slice(0, 5);
+    saveToStorage("boighor_recent", state.recentlyViewed);
+    renderRecentlyViewed();
+  }
+
+  function renderRecentlyViewed() {
+    const recentBooks = state.recentlyViewed
+      .map((id) => books.find((b) => b.id === id))
+      .filter(Boolean);
+
+    if (recentBooks.length === 0) {
+      recentSection.hidden = true;
+      return;
+    }
+
+    recentSection.hidden = false;
+    recentRow.innerHTML = "";
+    recentBooks.forEach((book) => {
+      const card = document.createElement("div");
+      card.className = "recent-card";
+      card.tabIndex = 0;
+      card.setAttribute("role", "link");
+      card.setAttribute("aria-label", "Open " + book.title);
+
+      const coverWrap = document.createElement("div");
+      coverWrap.className = "recent-cover";
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.alt = book.title + " cover";
+      img.src = book.image;
+      img.addEventListener("error", () => {
+        img.style.display = "none";
+        coverWrap.style.display = "flex";
+        coverWrap.style.alignItems = "center";
+        coverWrap.style.justifyContent = "center";
+        coverWrap.textContent = "No Cover";
+        coverWrap.style.fontWeight = "600";
+        coverWrap.style.color = "var(--muted)";
+        coverWrap.style.fontSize = ".75rem";
+      });
+      if (!book.image || book.image.startsWith("PASTE_")) {
+        img.dispatchEvent(new Event("error"));
+      }
+      coverWrap.appendChild(img);
+
+      const titleEl = document.createElement("p");
+      titleEl.className = "recent-title";
+      titleEl.textContent = book.title;
+
+      card.appendChild(coverWrap);
+      card.appendChild(titleEl);
+
+      const goToBook = () => {
+        const el = bookContainer.querySelector(`[data-id="${book.id}"]`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          el.style.transition = "box-shadow .3s ease";
+          el.style.boxShadow = "0 0 0 3px var(--accent)";
+          setTimeout(() => (el.style.boxShadow = ""), 1200);
+        } else {
+          document.getElementById("explore").scrollIntoView({ behavior: "smooth" });
+        }
+      };
+      card.addEventListener("click", goToBook);
+      card.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") goToBook();
+      });
+
+      recentRow.appendChild(card);
+    });
+  }
+
+  /* =========================================================
+     THEME (DAY / NIGHT)
+     ========================================================= */
+  const themeToggle = document.getElementById("themeToggle");
+  const mobileThemeToggle = document.getElementById("mobileThemeToggle");
+  const mobileThemeLabel = document.getElementById("mobileThemeLabel");
+
+  function applyTheme(theme) {
+    state.theme = theme;
+    document.documentElement.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem("boighor_theme", theme);
+    } catch (e) {
+      /* storage unavailable — fail silently */
+    }
+    themeToggle.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+    if (mobileThemeLabel) {
+      mobileThemeLabel.textContent = theme === "dark" ? "Switch to Day Mode" : "Switch to Night Mode";
+    }
+  }
+
+  function toggleTheme() {
+    applyTheme(state.theme === "dark" ? "light" : "dark");
+  }
+
+  /* =========================================================
+     HEADER / NAV
+     ========================================================= */
+  const siteHeader = document.getElementById("siteHeader");
+  const navLinks = document.querySelectorAll(".nav-link, .mobile-menu nav a");
+  const sections = ["home", "reviews", "upcoming", "credits"]
+    .map((id) => document.getElementById(id))
+    .filter(Boolean);
+
+  function updateActiveNav() {
+    let currentId = "home";
+    const scrollPos = window.scrollY + 140;
+    sections.forEach((sec) => {
+      if (sec.offsetTop <= scrollPos) currentId = sec.id;
+    });
+    navLinks.forEach((link) => {
+      link.classList.toggle("active", link.dataset.nav === currentId);
+    });
+  }
+
+  /* =========================================================
+     MOBILE MENU
+     ========================================================= */
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const mobileMenuBackdrop = document.getElementById("mobileMenuBackdrop");
+
+  function openMobileMenu() {
+    mobileMenu.classList.add("open");
+    mobileMenuBackdrop.classList.add("open");
+    hamburgerBtn.classList.add("open");
+    hamburgerBtn.setAttribute("aria-expanded", "true");
+    mobileMenu.setAttribute("aria-hidden", "false");
+    document.body.classList.add("no-scroll");
+  }
+  function closeMobileMenu() {
+    mobileMenu.classList.remove("open");
+    mobileMenuBackdrop.classList.remove("open");
+    hamburgerBtn.classList.remove("open");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+    mobileMenu.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("no-scroll");
+  }
+
+  /* =========================================================
+     SCROLL PROGRESS + BACK TO TOP + HEADER SHADOW
+     ========================================================= */
+  const scrollProgress = document.getElementById("scrollProgress");
+  const backToTop = document.getElementById("backToTop");
+
+  function handleScroll() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    scrollProgress.style.width = progress + "%";
+
+    backToTop.classList.toggle("show", scrollTop > 480);
+    siteHeader.style.boxShadow = scrollTop > 8 ? "0 8px 24px rgba(0,0,0,0.06)" : "none";
+
+    updateActiveNav();
+  }
+
+  /* =========================================================
+     SCROLL REVEAL for generic sections
+     ========================================================= */
+  function initRevealSections() {
+    const revealEls = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window)) {
+      revealEls.forEach((el) => el.classList.add("in-view"));
+      return;
+    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    revealEls.forEach((el) => obs.observe(el));
+  }
+
+  /* =========================================================
+     REVIEWS
+     ========================================================= */
+  const reviewGrid = document.getElementById("reviewGrid");
+  const writeReviewBtn = document.getElementById("writeReviewBtn");
+  const reviewPanel = document.getElementById("reviewPanel");
+  const reviewForm = document.getElementById("reviewForm");
+  const starInput = document.getElementById("starInput");
+  const reviewRatingValue = document.getElementById("reviewRatingValue");
+
+  function renderReviews() {
+    const allReviews = [...seedReviews, ...state.reviews].sort(
+      (a, b) => new Date(b.date) - new Date(a.date)
+    );
+    reviewGrid.innerHTML = "";
+    allReviews.forEach((review) => {
+      const card = document.createElement("div");
+      card.className = "review-card";
+
+      const top = document.createElement("div");
+      top.className = "review-top";
+
+      const avatar = document.createElement("div");
+      avatar.className = "review-avatar";
+      avatar.textContent = review.name.trim().charAt(0).toUpperCase();
+
+      const nameWrap = document.createElement("div");
+      const nameEl = document.createElement("p");
+      nameEl.className = "review-name";
+      nameEl.textContent = review.name;
+      const dateEl = document.createElement("p");
+      dateEl.className = "review-date";
+      dateEl.textContent = formatDate(review.date);
+      nameWrap.appendChild(nameEl);
+      nameWrap.appendChild(dateEl);
+
+      top.appendChild(avatar);
+      top.appendChild(nameWrap);
+
+      const stars = document.createElement("div");
+      stars.className = "review-stars";
+      stars.setAttribute("aria-label", review.rating + " out of 5 stars");
+      stars.textContent = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
+
+      const text = document.createElement("p");
+      text.className = "review-text";
+      text.textContent = review.text;
+
+      card.appendChild(top);
+      card.appendChild(stars);
+      card.appendChild(text);
+      reviewGrid.appendChild(card);
+    });
+  }
+
+  function formatDate(dateStr) {
+    const d = new Date(dateStr);
+    if (isNaN(d)) return dateStr;
+    return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+  }
+
+  function isReviewPanelOpen() {
+    return reviewPanel.classList.contains("open");
+  }
+  function openReviewPanel() {
+    reviewPanel.hidden = false;
+    // allow the browser to register hidden=false before animating
+    requestAnimationFrame(() => reviewPanel.classList.add("open"));
+    writeReviewBtn.setAttribute("aria-expanded", "true");
+    document.getElementById("reviewName").focus();
+  }
+  function closeReviewPanel() {
+    reviewPanel.classList.remove("open");
+    writeReviewBtn.setAttribute("aria-expanded", "false");
+    setTimeout(() => {
+      if (!isReviewPanelOpen()) reviewPanel.hidden = true;
+    }, 350);
+  }
+  function toggleReviewPanel() {
+    isReviewPanelOpen() ? closeReviewPanel() : openReviewPanel();
+  }
+
+  function setStarRating(value) {
+    state.selectedStar = value;
+    reviewRatingValue.value = value;
+    document.querySelectorAll(".star-btn").forEach((btn) => {
+      btn.classList.toggle("filled", Number(btn.dataset.value) <= value);
+    });
+  }
+
+  function handleReviewSubmit(e) {
+    e.preventDefault();
+    const name = document.getElementById("reviewName").value.trim();
+    const text = document.getElementById("reviewText").value.trim();
+    const rating = Number(reviewRatingValue.value) || 5;
+    if (!name || !text) return;
+
+    state.reviews.unshift({
+      name,
+      rating,
+      text,
+      date: new Date().toISOString(),
+    });
+    saveToStorage("boighor_reviews", state.reviews);
+    renderReviews();
+    reviewForm.reset();
+    setStarRating(5);
+    closeReviewPanel();
+  }
+
+  /* =========================================================
+     UPCOMING BOOKS RENDER
+     ========================================================= */
+  function renderUpcomingBooks() {
+    const upcomingRow = document.getElementById("upcomingRow");
+    upcomingRow.innerHTML = "";
+    upcomingBooks.forEach((book) => {
+      const card = document.createElement("div");
+      card.className = "upcoming-card";
+
+      const coverWrap = document.createElement("div");
+      coverWrap.className = "upcoming-cover";
+
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.alt = book.title + " cover";
+      img.src = book.image;
+      img.addEventListener("error", () => {
+        coverWrap.style.display = "flex";
+        coverWrap.style.alignItems = "center";
+        coverWrap.style.justifyContent = "center";
+        coverWrap.innerHTML = `<span style="font-weight:600;color:var(--muted);font-size:.8rem;">No Cover</span>`;
+      });
+      if (!book.image || book.image.startsWith("PASTE_")) {
+        img.dispatchEvent(new Event("error"));
+      } else {
+        coverWrap.appendChild(img);
+      }
+
+      const badge = document.createElement("span");
+      badge.className = "coming-soon-badge";
+      badge.textContent = "COMING SOON";
+      coverWrap.appendChild(badge);
+
+      const body = document.createElement("div");
+      body.className = "upcoming-body";
+      body.innerHTML = `
+        <p class="upcoming-title">${escapeHtml(book.title)}</p>
+        <p class="upcoming-author">${escapeHtml(book.author)}</p>
+        <p class="upcoming-date">Expected: ${escapeHtml(book.releaseDate)}</p>
+      `;
+      const btn = document.createElement("button");
+      btn.className = "btn-disabled";
+      btn.disabled = true;
+      btn.textContent = "Coming Soon";
+      body.appendChild(btn);
+
+      card.appendChild(coverWrap);
+      card.appendChild(body);
+      upcomingRow.appendChild(card);
+    });
+  }
+
+  /* =========================================================
+     KEYBOARD SHORTCUTS
+     ========================================================= */
+  function handleGlobalKeydown(e) {
+    const activeTag = document.activeElement.tagName;
+    const isTyping = activeTag === "INPUT" || activeTag === "TEXTAREA";
+
+    if (e.key === "/" && !isTyping) {
+      e.preventDefault();
+      searchInput.focus();
+    }
+
+    if (e.key === "Escape") {
+      if (isReviewPanelOpen()) {
+        closeReviewPanel();
+      } else if (mobileMenu.classList.contains("open")) {
+        closeMobileMenu();
+      } else if (document.activeElement === searchInput && state.searchTerm) {
+        clearSearch();
+      }
+    }
+  }
+
+  /* =========================================================
+     INIT
+     ========================================================= */
+  function init() {
+    // Theme
+    applyTheme(state.theme);
+
+    // QR code
+    const qrImg = document.getElementById("qrCodeImg");
+    if (qrImg) {
+      qrImg.src = QR_CODE_URL;
+      qrImg.addEventListener("error", () => {
+        qrImg.style.display = "flex";
+        qrImg.style.alignItems = "center";
+        qrImg.style.justifyContent = "center";
+      });
+    }
+
+    renderCategories();
+    renderBooks();
+    renderRecentlyViewed();
+    renderReviews();
+    renderUpcomingBooks();
+    initRevealSections();
+
+    // Search
+    searchInput.addEventListener("input", handleSearch);
+    searchClear.addEventListener("click", clearSearch);
+    clearSearchBtn.addEventListener("click", () => {
+      clearSearch();
+      state.activeCategory = "All";
+      state.showFavoritesOnly = false;
+      favoritesToggle.classList.remove("active");
+      renderCategories();
+      renderBooks();
+    });
+
+    // Favorites
+    favoritesToggle.addEventListener("click", toggleFavoritesFilter);
+
+    // Theme toggles
+    themeToggle.addEventListener("click", toggleTheme);
+    if (mobileThemeToggle) mobileThemeToggle.addEventListener("click", toggleTheme);
+
+    // Mobile menu
+    hamburgerBtn.addEventListener("click", () => {
+      mobileMenu.classList.contains("open") ? closeMobileMenu() : openMobileMenu();
+    });
+    mobileMenuBackdrop.addEventListener("click", closeMobileMenu);
+    mobileMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeMobileMenu);
+    });
+
+    // Nav smooth scroll (native CSS scroll-behavior handles most; ensure active state updates)
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    // Back to top
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Reviews (inline panel — no popup)
+    writeReviewBtn.addEventListener("click", toggleReviewPanel);
+    reviewForm.addEventListener("submit", handleReviewSubmit);
+    starInput.querySelectorAll(".star-btn").forEach((btn) => {
+      btn.addEventListener("click", () => setStarRating(Number(btn.dataset.value)));
+    });
+    setStarRating(5);
+
+    // Keyboard shortcuts
+    document.addEventListener("keydown", handleGlobalKeydown);
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+
+</script>
+</body>
+</html>      <a href="#upcoming" class="nav-link" data-nav="upcoming">Upcoming</a>
       <a href="#credits" class="nav-link" data-nav="credits">Credits</a>
     </nav>
 
